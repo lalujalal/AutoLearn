@@ -1,10 +1,6 @@
 import 'package:first_project/hive/hive_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:first_project/splash.dart';
-// import 'package:first_project/hive/hive.dart';
-// import 'package:hive_flutter/adapters.dart';
-// import 'package:path_provider/path_provider.dart' as path;
-
+import 'package:first_project/screens/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

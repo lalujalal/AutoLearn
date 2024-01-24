@@ -8,6 +8,8 @@ late Box<User> user;
 late Box<Chapter> chapter;
 late Box<Question> question;
 late Box<Score> score;
+
+
 Future<void> initializeHive() async {
   final dir = await path.getApplicationDocumentsDirectory();
   Hive.init(dir.path);
