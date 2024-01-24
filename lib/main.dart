@@ -4,7 +4,7 @@ import 'package:first_project/screens/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeHive(); // await for the initialization to complete
+  await initializeHive(); 
   runApp(const MyApp());
 }
 
