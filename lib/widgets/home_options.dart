@@ -1,5 +1,9 @@
 import 'package:first_project/Screens/User/previous.dart';
 import 'package:first_project/Screens/admin/add_chapter.dart';
+import 'package:first_project/Screens/admin/add_questions.dart';
+import 'package:first_project/Screens/admin/edit_question.dart';
+import 'package:first_project/Screens/admin/editchapter_previous.dart';
+import 'package:first_project/Screens/admin/user_evaluation.dart';
 import 'package:flutter/material.dart';
 
 class AdminButtonWithDesign extends StatelessWidget {
@@ -18,6 +22,16 @@ class AdminButtonWithDesign extends StatelessWidget {
          if (label == 'Add Chapters') {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (ctx) => const AddChapter(),
+          ));
+         }else if (label == 'Update Tutorials') {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => const AdminChapterEditScreen(),
+          ));
+         }else if (label == 'Update Questions') {
+          questionsPopup(context);
+         }else if (label == 'User Details &\n Students Evaluation') {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => UserEvaluation(),
           ));
          }else if (label == 'Log Out') {
           logoutPopup(context);
@@ -134,3 +148,47 @@ Future<void> logoutPopup(BuildContext context) async {
     },
   );
 }
+
+Future<void> questionsPopup(BuildContext context) async {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Update Questions'),
+        content: const Text('Select an action:'),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the popup
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddQuestionPage()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(100, 40),
+              backgroundColor: const Color.fromARGB(255, 214, 214, 214),
+            ),
+            child: const Icon(Icons.add,color: Colors.black),
+          ),
+          const SizedBox(width: 30,),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(); 
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>const EditQuestionPage()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(100, 40),
+              backgroundColor: const Color.fromARGB(255, 214, 214, 214),
+            ),
+            child: const Icon(Icons.edit,color: Colors.black),
+          ),
+        ],
+      );
+    },
+  );
+}
+

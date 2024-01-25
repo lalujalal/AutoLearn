@@ -80,6 +80,8 @@ flutter:
     - assets/images/progress.png
     - assets/images/logout.png
     - assets/images/quest.png
+    - assets/images/demoimg.jpg
+    - assets/images/evaluation.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

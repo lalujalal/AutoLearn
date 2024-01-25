@@ -1,4 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:first_project/Screens/User/profile.dart';
+import 'package:first_project/Screens/User/search.dart';
+import 'package:first_project/Screens/User/statistics.dart';
 import 'package:first_project/Screens/User/user_home.dart';
 import 'package:first_project/hive/hive.dart';
 import 'package:flutter/material.dart';
@@ -26,18 +29,19 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   int index = 0;
-
   @override
   Widget build(BuildContext context) {
     final screens = [
       const UserHomeScreen(),
-      // const SearchPage(),
-      // StatisticsScreen(
-      //   userBox: userBox,
-      //   scoreBox: scoreBox,
-      //   questionBox: questionBox,
-      // ),
-      // const ProfilePage(),
+      const SearchPage(),
+      StatisticsScreen(
+        userBox: userBox,
+        scoreBox: scoreBox,
+        questionBox: questionBox,
+        correctAnswersCount: 0,
+        incorrectAnswersCount: 0,
+      ),
+      const ProfilePage(),
     ];
 
     final bottomBarItems = [

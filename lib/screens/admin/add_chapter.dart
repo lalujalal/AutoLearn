@@ -66,7 +66,7 @@ class _AddChapterState extends State<AddChapter> {
               const SizedBox(width: 25),
               const Text(
                 'Add Chapters',
-                style: TextStyle(color: Colors.white, fontSize: 22),
+                style: TextStyle(color: Colors.white, fontSize: 22,fontWeight: FontWeight.bold),
               ),
             ],
           ),

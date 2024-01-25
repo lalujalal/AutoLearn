@@ -4,7 +4,7 @@ class DynamicField extends StatelessWidget {
   final int index;
   final TextEditingController subHeadingController;
   final TextEditingController subHeadingContentController;
-  final VoidCallback onRemove; // Added onRemove callback
+  final VoidCallback onRemove; 
 
   const DynamicField({
     Key? key,
