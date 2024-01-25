@@ -1,11 +1,11 @@
+import 'package:first_project/Screens/User/user_signup.dart';
 import 'package:flutter/material.dart';
-// import 'package:first_project/Screens/User/bottomnav.dart';
-// import 'package:first_project/Screens/User/user_signUp.dart';
+import 'package:first_project/Screens/User/bottomnav.dart';
 import 'package:first_project/hive/hive.dart';
 import 'package:hive/hive.dart';
 
 class UserLogIn extends StatefulWidget {
-  const UserLogIn({super.key});
+  const UserLogIn({Key? key});
 
   @override
   State<UserLogIn> createState() => _UserLogInState();
@@ -16,6 +16,9 @@ class _UserLogInState extends State<UserLogIn> {
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late Box<User> userBox;
+
+  bool isUserNameValid = true;
+  bool isPasswordValid = true;
 
   @override
   void initState() {
@@ -64,6 +67,11 @@ class _UserLogInState extends State<UserLogIn> {
                     children: [
                       TextFormField(
                         controller: userNameController,
+                        onChanged: (value) {
+                          setState(() {
+                            isUserNameValid = true;
+                          });
+                        },
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           labelStyle: const TextStyle(
@@ -82,10 +90,14 @@ class _UserLogInState extends State<UserLogIn> {
                             borderSide: const BorderSide(
                                 color: Color(0xff435288), width: 2),
                           ),
+                          errorText: isUserNameValid ? null : 'Enter your name',
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Value is Empty,Enter your name';
+                            setState(() {
+                              isUserNameValid = false;
+                            });
+                            return 'Value is Empty, Enter your name';
                           } else {
                             return null;
                           }
@@ -96,6 +108,11 @@ class _UserLogInState extends State<UserLogIn> {
                       ),
                       TextFormField(
                         controller: passwordController,
+                        onChanged: (value) {
+                          setState(() {
+                            isPasswordValid = true;
+                          });
+                        },
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           labelStyle: const TextStyle(
@@ -116,12 +133,19 @@ class _UserLogInState extends State<UserLogIn> {
                             borderSide: const BorderSide(
                                 color: Color(0xff435288), width: 2),
                           ),
+                          errorText: isPasswordValid ? null : 'Invalid password',
                         ),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
+                            setState(() {
+                              isPasswordValid = false;
+                            });
                             return 'Password is required';
                           } else if (value.length < 8) {
+                            setState(() {
+                              isPasswordValid = false;
+                            });
                             return 'Password must be at least 8 characters long';
                           } else {
                             return null;
@@ -156,23 +180,25 @@ class _UserLogInState extends State<UserLogIn> {
                   ),
                 ),
               ),
-              const SizedBox(height: 25,),
+              const SizedBox(
+                height: 25,
+              ),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Do not Have Any Account?'),
-                    TextButton(
-                      onPressed: () {
-                        // Navigator.of(context).pushReplacement(
-                        //     MaterialPageRoute(
-                        //         builder: (ctx) => const UserSignUpScreen()));
-                      },
-                      child: const Text('Sign Up',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                    )
-                  ])
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Do not Have Any Account?'),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (ctx) => const UserSignUpScreen()));
+                    },
+                    child: const Text('Sign Up',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold)),
+                  )
+                ],
+              ),
             ],
           ),
         ),
@@ -202,8 +228,8 @@ class _UserLogInState extends State<UserLogIn> {
         // Successfully signed in, navigate to the home page
         final String userId = matchingUser.userId;
         print('Successfully signed in with userId: $userId');
-        // Navigator.of(context).pushReplacement(
-        //     MaterialPageRoute(builder: (ctx) => const BottomNav()));
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (ctx) => const BottomNav()));
       } else {
         // Display an error message
         const errorMessage = 'Username or password is incorrect';

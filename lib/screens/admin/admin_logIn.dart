@@ -1,3 +1,4 @@
+import 'package:first_project/Screens/admin/admin_home.dart';
 import 'package:flutter/material.dart';
 
 class AdminSignIn extends StatefulWidget {
@@ -137,15 +138,13 @@ class _AdminSignInState extends State<AdminSignIn> {
                       width: 330,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Validate credentials
                           if (_formKey.currentState?.validate() ?? false) {
-                            // Check for correct credentials
                             if (userNameController.text == hardcodedUsername &&
                                 passwordController.text == hardcodedPassword) {
                               // Navigate to AdminHome if credentials are correct
-                              // Navigator.of(context).pushReplacement(
-                              //   MaterialPageRoute(builder: (ctx1) => const AdminHome()),
-                              // );
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (ctx1) => const AdminHome()),
+                              );
                             } else {
                               // Handle incorrect credentials
                               // Show an alert box

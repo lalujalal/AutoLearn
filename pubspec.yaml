@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  curved_navigation_bar: ^1.0.3
+  image_picker: ^1.0.7
   
 
 dev_dependencies:
@@ -70,6 +72,15 @@ flutter:
     - assets/images/icon.png
     - assets/images/usersignin.png
     - assets/images/admin_login.png
+    - assets/images/user_create.png
+    - assets/images/home_header.png
+    - assets/images/settings.png
+    - assets/images/chapter.png
+    - assets/images/edit.png
+    - assets/images/progress.png
+    - assets/images/logout.png
+    - assets/images/quest.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
