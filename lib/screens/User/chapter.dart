@@ -1,9 +1,10 @@
 import 'dart:io';
 // import 'package:first_project/Screens/User/quiz.dart';
+import 'package:first_project/Screens/User/quiz.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class DemoChapter extends StatefulWidget {
   final Chapter chapter;
@@ -16,21 +17,21 @@ class DemoChapter extends StatefulWidget {
 
 class DemoChapterState extends State<DemoChapter> {
   late Future<void> initialization;
-  // late YoutubePlayerController ytController;
+  late YoutubePlayerController ytController;
   final TextEditingController newReferenceImagePathController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     initialization = initializeHive();
-    // final videoId = YoutubePlayer.convertUrlToId(widget.chapter.youtubeLink);
-    // ytController = YoutubePlayerController(
-    //   initialVideoId: videoId!,
-    //   flags: const YoutubePlayerFlags(
-    //     autoPlay: false,
-    //     showLiveFullscreenButton: true,
-    //   ),
-    // );
+    final videoId = YoutubePlayer.convertUrlToId(widget.chapter.youtubeLink);
+    ytController = YoutubePlayerController(
+      initialVideoId: videoId!,
+      flags: const YoutubePlayerFlags(
+        autoPlay: false,
+        showLiveFullscreenButton: true,
+      ),
+    );
   }
 
   Future<void> initializeHive() async {
@@ -168,22 +169,22 @@ class DemoChapterState extends State<DemoChapter> {
                   const Divider(thickness: 1, color: Colors.grey),
                 ],
               ),
-            // YoutubePlayer(
-            //   controller: ytController,
-            //   showVideoProgressIndicator: true,
-            // ),
-            // const SizedBox(height: 10,),
+            YoutubePlayer(
+              controller: ytController,
+              showVideoProgressIndicator: true,
+            ),
+            const SizedBox(height: 10,),
             SizedBox(
               height: 65,
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => QuizPageDemo(chapterKey: demoChapter.chapterKey,),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuizPageDemo(chapterKey: demoChapter.chapterKey,),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 24, 23, 23),

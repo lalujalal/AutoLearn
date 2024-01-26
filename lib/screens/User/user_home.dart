@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:first_project/Screens/User/chapter.dart';
 import 'package:hive/hive.dart';
 import 'package:first_project/hive/hive.dart';
 import 'package:flutter/material.dart';
@@ -85,12 +86,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   ),
                   itemCount: chapterBox.length,
                   itemBuilder: (BuildContext context, int index) {
-                    // Chapter chapter = chapterBox.getAt(index)!;
-                    // return ChapterButton(
-                    //   iconImageUrl: chapter.chapterIconImagePath,
-                    //   buttonText: chapter.chapterName,
-                    //   chapterScreen: DemoChapter(chapter: chapter),
-                    // );
+                    Chapter chapter = chapterBox.getAt(index)!;
+                    return ChapterButton(
+                      iconImageUrl: chapter.chapterIconImagePath,
+                      buttonText: chapter.chapterName,
+                      chapterScreen: DemoChapter(chapter: chapter),
+                    );
                   },
                 ),
               ),
