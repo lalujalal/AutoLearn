@@ -20,7 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    // Call openUserBox in initState
+    userBox = Hive.box<User>('user');
     openUserBox();
   }
 
@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
           fontSize: 24,
           topAlign: 60,
           leftAlign: 150,
-          userBox: userBox,
+           userBox: userBox 
         ),
       ),
       body: Padding(

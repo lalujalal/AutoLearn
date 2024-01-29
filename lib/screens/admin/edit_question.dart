@@ -19,24 +19,25 @@ class EditQuestionPageState extends State<EditQuestionPage> {
   bool loading = true; // Added loading state
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-    selectedChapter = chapterBox.isNotEmpty ? chapterBox.values.first : null;
+ @override
+void initState() {
+  super.initState();
+  Hive.openBox<Chapter>('chapter');
+  selectedChapter = chapterBox.isNotEmpty ? chapterBox.values.first : null;
 
-    // Check if selectedChapter is not null before opening the questionBox
-    if (selectedChapter != null) {
-      // Explicitly open the Hive box using openBox command
+  if (selectedChapter != null) {
+    questionBox = Hive.box<Question>('question_${selectedChapter!.chapterKey}');
+
+    if (questionBox == null) {
       Hive.openBox<Question>('question_${selectedChapter!.chapterKey}').then(
         (box) {
           setState(() {
             questionBox = box;
             questions = questionBox!.values.toList();
-            loading = false; // Set loading to false when the data is loaded
+            loading = false;
           });
         },
       ).catchError((error) {
-        // Handle the case if there's an error opening the box
         print('Error opening questionBox: $error');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -47,13 +48,17 @@ class EditQuestionPageState extends State<EditQuestionPage> {
         );
       });
     } else {
-      // Handle the case when selectedChapter is null
-      // You may want to display an error message or handle it in another way
-      // For now, setting an empty list for questions
-      questions = [];
-      loading = false; // Set loading to false when there's no selected chapter
+      setState(() {
+        questions = questionBox!.values.toList();
+        loading = false;
+      });
     }
+  } else {
+    questions = [];
+    loading = false;
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

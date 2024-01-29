@@ -39,12 +39,12 @@ class ChapterEditButton extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.file(
               File(iconImageUrl),
               width: 75,
-              height: 75,
+              height: 70,
             ),
             Text(
               buttonText,
@@ -62,6 +62,7 @@ class ChapterEditButton extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: onEditPressed,
+                      
                     ),
                   if (showDeleteButton)
                     IconButton(

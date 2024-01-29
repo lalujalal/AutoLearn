@@ -1,8 +1,8 @@
-import 'package:first_project/Screens/User/chapter.dart';
 import 'package:first_project/Screens/admin/add_chapter.dart';
+import 'package:first_project/Screens/admin/edit_chapter.dart';
 import 'package:first_project/widgets/chapter_button.dart';
-import 'package:first_project/hive/hive.dart';
 import 'package:flutter/material.dart';
+import 'package:first_project/hive/hive.dart';
 import 'package:hive/hive.dart';
 
 class AdminChapterEditScreen extends StatefulWidget {
@@ -18,8 +18,12 @@ class _AdminChapterEditScreenState extends State<AdminChapterEditScreen> {
   @override
   void initState() {
     super.initState();
-    Hive.openBox<Chapter>('chapter');
     chapterBox = Hive.box<Chapter>('chapter');
+    Hive.openBox<Chapter>('chapter').then((value) {
+      setState(() {
+        chapterBox = value;
+      });
+    });
   }
 
   @override
@@ -64,65 +68,71 @@ class _AdminChapterEditScreenState extends State<AdminChapterEditScreen> {
           ),
         ),
       ),
-      body: chapterBox.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'No Chapters available, Kindly Add Chapters',
-                    style: TextStyle(fontSize: 18,),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigate to the screen where the user can add a chapter
-                      // Replace 'YourAddChapterScreen()' with your actual screen
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>const AddChapter()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey
+      body: Padding(
+        padding: const EdgeInsets.only(left:20.0,right: 20,bottom: 20),
+        child:chapterBox.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'No Chapters available, Kindly Add Chapters',
+                          style: TextStyle(fontSize: 18,),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+    
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const AddChapter()));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey
+                          ),
+                          child: const Text('Add Chapter'),
+                        ),
+                      ],
                     ),
-                    child: const Text('Add Chapter'),
-                    
-                  ),
-                ],
-              ),
-            )
-          : GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 25.0,
-                mainAxisSpacing: 10.0,
-                mainAxisExtent: 110,
-              ),
-              itemCount: chapterBox.length,
-              itemBuilder: (BuildContext context, int index) {
-                Chapter chapter = chapterBox.getAt(index)!;
+                  )
+                : GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 25.0,
+                      mainAxisSpacing: 10.0,
+                      mainAxisExtent: 136,
+                    ),
+                    itemCount: chapterBox.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Chapter chapter = chapterBox.getAt(index)!;
 
-                return ChapterEditButton(
-                  iconImageUrl: chapter.chapterIconImagePath,
-                  buttonText: chapter.chapterName,
-                  chapterScreen: DemoChapter(chapter: chapter),
-                  onEditPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) =>EditChapter(
-                    //       chapter: chapter,
-                    //     ),
-                    //   ),
-                    // );
-                  },
-                  onDeletePressed: () {
-                    // Implement delete functionality
-                    chapterBox.deleteAt(index);
-                  },
-                  showEditButton: true,
-                  showDeleteButton: true,
-                );
-              },
-            ),
+                      return ChapterEditButton(
+                        iconImageUrl: chapter.chapterIconImagePath,
+                        buttonText: chapter.chapterName,
+                        chapterScreen: EditChapter(chapterKey: chapter.chapterKey),
+                        onEditPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditChapter(chapterKey: chapter.chapterKey),
+                            ),
+                          ).then((value) {
+                            // Refresh the page after editing
+                            setState(() {});
+                          });
+                        },
+                        onDeletePressed: () {
+                          // Implement delete functionality
+                          chapterBox.deleteAt(index);
+                          // Refresh the page after deletion
+                          setState(() {});
+                        },
+                        showEditButton: true,
+                        showDeleteButton: true,
+                      );
+                    },
+                  ),
+      ),
     );
   }
 }
+
+
