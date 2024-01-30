@@ -30,6 +30,7 @@ class EditChapterState extends State<EditChapter> {
   @override
   void initState() {
     super.initState();
+    Hive.openBox<Chapter>('chapter');
     chapterBox = Hive.box<Chapter>('chapter');
     existingChapter = chapterBox.get(widget.chapterKey)!;
 
@@ -83,9 +84,12 @@ class EditChapterState extends State<EditChapter> {
         toolbarHeight: 140,
         flexibleSpace: Ink(
           height: 130,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: const Color.fromARGB(255, 105, 105, 105),
+          decoration:const BoxDecoration(
+            borderRadius:  BorderRadius.only(
+              bottomLeft: Radius.circular(18),
+              bottomRight: Radius.circular(18),
+            ),
+            color: Color.fromARGB(255, 105, 105, 105),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

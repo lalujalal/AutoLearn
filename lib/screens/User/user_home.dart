@@ -80,7 +80,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         ),
       ),
        Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(bottom: 20,left: 20,right: 20),
         child:chapterBox.isEmpty
                 ? const Center(
                     child: Text(

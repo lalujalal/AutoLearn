@@ -27,6 +27,7 @@ class _UserEvaluationState extends State<UserEvaluation> {
   @override
   void initState() {
     super.initState();
+    Hive.openBox<User>('user');
     userBox = Hive.box<User>('user');
     scoreBox = Hive.box<Score>('score');
     questionBox = Hive.box<Question>('question');
@@ -42,9 +43,12 @@ class _UserEvaluationState extends State<UserEvaluation> {
         toolbarHeight: 140,
         flexibleSpace: Ink(
           height: 130,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: const Color.fromARGB(255, 105, 105, 105),
+          decoration:const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(18),
+              bottomRight: Radius.circular(18),
+            ),
+            color: Color.fromARGB(255, 105, 105, 105),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -92,8 +96,11 @@ class _UserEvaluationState extends State<UserEvaluation> {
         } else {
           List<User> users = snapshot.data ?? [];
           if (users.isEmpty) {
-            return const Center(
-              child: Text('No users available.'),
+            return const Padding(
+              padding: EdgeInsets.all(18.0),
+              child: Center(
+                child: Text('No users available.',style: TextStyle(fontWeight: FontWeight.bold),),
+              ),
             );
           }
 
@@ -102,7 +109,6 @@ class _UserEvaluationState extends State<UserEvaluation> {
             itemBuilder: (context, index) {
               // Extract the first letter of the username
               String firstLetter = users[index].name.substring(0, 1).toUpperCase();
-
               return ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Colors.grey,
@@ -181,7 +187,9 @@ class _UserEvaluationState extends State<UserEvaluation> {
     // Delete user from Hive
     userBox.delete(userId);
     // Refresh the user list
-    _reloadUsers(context);
+    setState(() {
+    _loadUsers(); // Reload the users
+  });
   }
 
   void _reloadUsers(BuildContext context) {

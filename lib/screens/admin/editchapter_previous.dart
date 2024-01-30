@@ -37,9 +37,12 @@ class _AdminChapterEditScreenState extends State<AdminChapterEditScreen> {
         toolbarHeight: 140,
         flexibleSpace: Ink(
           height: 140,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: const Color.fromARGB(255, 105, 105, 105),
+          decoration:const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(18),
+              bottomRight: Radius.circular(18),
+            ),
+            color:  Color.fromARGB(255, 105, 105, 105),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -152,6 +155,7 @@ class _AdminChapterEditScreenState extends State<AdminChapterEditScreen> {
               onPressed: () {
                 chapterBox.deleteAt(index);
                 Navigator.of(context).pop(); // Close the dialog
+                setState(() {});
               },
               child: const Text("Delete",style: TextStyle(color: Colors.black)),
             ),

@@ -19,17 +19,18 @@ class EditQuestionPageState extends State<EditQuestionPage> {
   bool loading = true; // Added loading state
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
- @override
+@override
 void initState() {
   super.initState();
   Hive.openBox<Chapter>('chapter');
   selectedChapter = chapterBox.isNotEmpty ? chapterBox.values.first : null;
 
   if (selectedChapter != null) {
-    questionBox = Hive.box<Question>('question_${selectedChapter!.chapterKey}');
+    final questionBoxKey = 'question_${selectedChapter!.chapterKey}';
+    questionBox = Hive.box<Question>(questionBoxKey);
 
     if (questionBox == null) {
-      Hive.openBox<Question>('question_${selectedChapter!.chapterKey}').then(
+      Hive.openBox<Question>(questionBoxKey).then(
         (box) {
           setState(() {
             questionBox = box;
@@ -60,12 +61,20 @@ void initState() {
 }
 
 
+
   @override
   Widget build(BuildContext context) {
     if (chapterBox.isEmpty) {
       return const Scaffold(
-        body: Center(
-          child: Text('No chapters available'),
+        body: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Center(
+            child: Text('No chapters available Kindly add chapters to add questions',
+              style: TextStyle(fontWeight: FontWeight.bold,
+                fontSize: 16
+              ),
+            ),
+          ),
         ),
       );
     }

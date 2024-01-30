@@ -21,10 +21,12 @@ class _UpdateNameState extends State<UpdateName> {
   void initState() {
     super.initState();
     openUserBox();
+    userBox = Hive.box<User>('user');
   }
 
   Future<void> openUserBox() async {
     await Hive.openBox<User>('user');
+    userBox = Hive.box<User>('user');
     setState(() {
       userBox = Hive.box<User>('user');
     });

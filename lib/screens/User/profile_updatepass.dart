@@ -18,6 +18,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   @override
   void initState() {
     super.initState();
+    Hive.openBox<User>('user');
+    userBox = Hive.box<User>('user');
     openUserBox();
   }
 
