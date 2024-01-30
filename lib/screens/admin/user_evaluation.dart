@@ -1,28 +1,36 @@
-// import 'package:first_project/Screens/User/statistics.dart';
+import 'package:first_project/Screens/User/statistics.dart';
 import 'package:first_project/hive/hive.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class UserEvaluation extends StatefulWidget {
-  // final Box<User> userBox;
+  final int correctAnswersCount;
+  final int incorrectAnswersCount;
 
-  const UserEvaluation({Key? key, }) : super(key: key);
+  UserEvaluation({
+    Key? key,
+    required this.correctAnswersCount,
+    required this.incorrectAnswersCount,
+  }) : super(key: key);
 
   @override
   _UserEvaluationState createState() => _UserEvaluationState();
 }
 
+
 class _UserEvaluationState extends State<UserEvaluation> {
   late Box<User> userBox;
+  late Box<Score> scoreBox;
+  late Box<Question> questionBox;
 
   @override
   void initState() {
     super.initState();
-    userBox;
-    
+    userBox = Hive.box<User>('user');
+    scoreBox = Hive.box<Score>('score');
+    questionBox = Hive.box<Question>('question');
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,8 +111,8 @@ class _UserEvaluationState extends State<UserEvaluation> {
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
-                title: Text(users[index].name),
-                subtitle: Text(users[index].email),
+                title: Text(users[index].name,style:const TextStyle(color: Colors.black)),
+                subtitle: Text(users[index].email,style: const TextStyle(color: Colors.black)),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -158,8 +166,8 @@ class _UserEvaluationState extends State<UserEvaluation> {
             ),
             TextButton(
               onPressed: () {
-                _deleteUser(context, userId); // Call the delete function
-                Navigator.of(dialogContext).pop(); // Close the dialog
+                _deleteUser(context, userId); 
+                Navigator.of(dialogContext).pop();
               },
               child: const Text("Delete"),
             ),
@@ -183,22 +191,26 @@ class _UserEvaluationState extends State<UserEvaluation> {
     Navigator.of(context).pop();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) =>const UserEvaluation(),
+        builder: (context) => UserEvaluation(
+      correctAnswersCount: widget.correctAnswersCount,
+      incorrectAnswersCount:widget.incorrectAnswersCount, 
+    ),
       ),
     );
   }
 
   void _navigateToStatistics(BuildContext context, String userId) {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => StatisticsScreen(
-    //       scoreBox: Hive.box<Score>('scoreBox'),
-    //       questionBox: Hive.box<Question>('questionBox'),
-    //       correctAnswersCount: 0, // Provide the correct count here
-    //       incorrectAnswersCount: 0, // Provide the incorrect count here
-    //     ),
-    //   ),
-    // );
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => StatisticsScreen(
+        scoreBox: scoreBox,
+        questionBox: questionBox,
+        userBox: userBox,
+        correctAnswersCount: widget.correctAnswersCount, // Fix the typo here
+        incorrectAnswersCount: widget.incorrectAnswersCount, // Fix the typo here
+      ),
+    ),
+  );
   }
 }

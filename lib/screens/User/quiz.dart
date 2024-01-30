@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:first_project/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
-// import 'package:first_project/Screens/User/score.dart';
+import 'package:first_project/Screens/User/score.dart';
 import 'package:first_project/hive/hive.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -147,19 +147,19 @@ class _QuizPageDemoState extends State<QuizPageDemo> {
       selectedQuestionNumber++;
       _loadQuestions(widget.chapterKey);
     } else {
-      // Navigate to the score page with correct and incorrect answers count
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => ScorePage(
-      //       chapterKey: widget.chapterKey,
-      //       questionBox: questionBox,
-      //       scoreBox: scoreBox,
-      //       correctAnswersCount: correctAnswersCount,
-      //       incorrectAnswersCount: incorrectAnswersCount,
-      //     ),
-      //   ),
-      // );
+      //Navigate to the score page with correct and incorrect answers count
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ScorePage(
+            chapterKey: widget.chapterKey,
+            questionBox: questionBox,
+            scoreBox: scoreBox,
+            correctAnswersCount: correctAnswersCount,
+            incorrectAnswersCount: incorrectAnswersCount,
+          ),
+        ),
+      );
     }
   }
 
@@ -399,18 +399,18 @@ class _QuizPageDemoState extends State<QuizPageDemo> {
             ),
             TextButton(
               onPressed: () {
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => ScorePage(
-                //       chapterKey: widget.chapterKey,
-                //       questionBox: questionBox,
-                //       scoreBox: scoreBox,
-                //       correctAnswersCount: correctAnswersCount,
-                //       incorrectAnswersCount: incorrectAnswersCount,
-                //     ),
-                //   ),
-                // );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ScorePage(
+                      chapterKey: widget.chapterKey,
+                      questionBox: questionBox,
+                      scoreBox: scoreBox,
+                      correctAnswersCount: correctAnswersCount,
+                      incorrectAnswersCount: incorrectAnswersCount,
+                    ),
+                  ),
+                );
               },
               child: const Text("Yes"),
             ),

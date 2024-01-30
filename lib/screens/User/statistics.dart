@@ -34,6 +34,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     super.initState();
     correctAnswers = widget.correctAnswersCount ?? 0;
     incorrectAnswers = widget.incorrectAnswersCount ?? 0;
+
+    Hive.openBox<User>('user');
+    Hive.openBox<Score>('score');
+    Hive.openBox<Question>('question');
   }
 
   @override

@@ -31,7 +31,10 @@ class AdminButtonWithDesign extends StatelessWidget {
           questionsPopup(context);
          }else if (label == 'User Details &\n Students Evaluation') {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) =>const UserEvaluation(),
+            builder: (ctx) =>UserEvaluation(
+              correctAnswersCount:0,
+              incorrectAnswersCount: 0,
+            ),
           ));
          }else if (label == 'Log Out') {
           logoutPopup(context);

@@ -120,8 +120,7 @@ class _AdminChapterEditScreenState extends State<AdminChapterEditScreen> {
                           });
                         },
                         onDeletePressed: () {
-                          // Implement delete functionality
-                          chapterBox.deleteAt(index);
+                          showDeletePopup(index);
                           // Refresh the page after deletion
                           setState(() {});
                         },
@@ -133,6 +132,35 @@ class _AdminChapterEditScreenState extends State<AdminChapterEditScreen> {
       ),
     );
   }
+
+   Future<void> showDeletePopup(int index) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context,) {
+        
+        return AlertDialog(
+          title: const Text("Delete Chapter"),
+          content: const Text("Are you sure you want to delete this chapter?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Cancel",style: TextStyle(color: Colors.black),),
+            ),
+            TextButton(
+              onPressed: () {
+                chapterBox.deleteAt(index);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Delete",style: TextStyle(color: Colors.black)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
 
 
