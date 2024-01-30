@@ -206,7 +206,6 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
       userBox.put(userId, newUser);
 
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const UserLogIn()));
-      
     }else {
       const errormssg = 'user name or pass word is incorrect';
       showDialog(

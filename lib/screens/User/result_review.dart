@@ -132,7 +132,7 @@ class _ResultReviewState extends State<ResultReview> {
                               builder: (context) => StatisticsScreen(
                                 scoreBox: widget.scoreBox,
                                 questionBox: widget.questionBox,
-                                userBox: widget.userBox, // Pass userBox here
+                                userBox: widget.userBox, 
                                 correctAnswersCount: correctAnswers,
                                 incorrectAnswersCount: incorrectAnswers,
                               ),

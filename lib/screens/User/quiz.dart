@@ -148,18 +148,8 @@ class _QuizPageDemoState extends State<QuizPageDemo> {
       _loadQuestions(widget.chapterKey);
     } else {
       //Navigate to the score page with correct and incorrect answers count
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ScorePage(
-            chapterKey: widget.chapterKey,
-            questionBox: questionBox,
-            scoreBox: scoreBox,
-            correctAnswersCount: correctAnswersCount,
-            incorrectAnswersCount: incorrectAnswersCount,
-          ),
-        ),
-      );
+      _showScorePagePopup();
+      
     }
   }
 

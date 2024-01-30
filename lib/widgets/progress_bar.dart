@@ -88,26 +88,27 @@ class LinearProgressBarReview extends StatelessWidget {
     // Check if values are finite before converting to int
     if (correctProgress.isFinite && incorrectProgress.isFinite) {
       return Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(22.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 10,
-              child: LinearProgressIndicator(
-                value: incorrectProgress,
-                valueColor: const AlwaysStoppedAnimation<Color>(Color(0xffFA3939)),
-                backgroundColor: const Color(0xffE9ECEF),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 10,
-              child: LinearProgressIndicator(
+            const Text('Correct Answer Progress :',style: TextStyle(fontSize: 18,fontWeight:FontWeight.bold),),
+            const SizedBox(height: 40,),
+            LinearProgressIndicator(
+              minHeight: 10,
                 value: correctProgress,
                 valueColor: const AlwaysStoppedAnimation<Color>(Color(0xff1F8435)),
                 backgroundColor: const Color(0xffE9ECEF),
               ),
+            const SizedBox(height: 50),
+            const Text('Incorrect Answer :',style: TextStyle(fontSize: 18,fontWeight:FontWeight.bold),),
+            const SizedBox(height: 40,),
+            LinearProgressIndicator(
+              minHeight: 10,
+                value: incorrectProgress,
+                valueColor: const AlwaysStoppedAnimation<Color>(Color(0xffFA3939)),
+                backgroundColor: const Color(0xffE9ECEF),
             ),
           ],
         ),
