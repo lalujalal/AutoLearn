@@ -238,7 +238,7 @@ class _QuizPageDemoState extends State<QuizPageDemo> {
                 ),
                 Positioned(
                   top: 140,
-                  right: 165,
+                  left: MediaQuery.of(context).size.width / 2 - 40,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [

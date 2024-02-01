@@ -47,7 +47,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
         ),
         Positioned(
           bottom: 20,
-          left: 140,
+          left:MediaQuery.of(context).size.width / 2 - 40,
           child: GestureDetector(
             onTap: () {
               _pickImage();

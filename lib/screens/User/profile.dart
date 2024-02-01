@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
           pageTitle: 'Profile',
           fontSize: 24,
           topAlign: 60,
-          leftAlign: 150,
+          leftAlign:MediaQuery.of(context).size.width / 2 - 40,
            userBox: userBox 
         ),
       ),

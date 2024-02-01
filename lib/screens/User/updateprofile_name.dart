@@ -43,7 +43,7 @@ class _UpdateNameState extends State<UpdateName> {
           pageTitle: 'Update Name',
           fontSize: 18,
           topAlign: 60,
-          leftAlign: 130,
+          leftAlign:MediaQuery.of(context).size.width / 2 - 40,
           userBox: userBox,
         ),
       ),

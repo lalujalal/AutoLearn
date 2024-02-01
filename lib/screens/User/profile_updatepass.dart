@@ -41,7 +41,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
           pageTitle: 'Update Password',
           fontSize: 18,
           topAlign: 60,
-          leftAlign: 120,
+          leftAlign:MediaQuery.of(context).size.width / 2 - 40,
           userBox: userBox,
         ),
       ),
