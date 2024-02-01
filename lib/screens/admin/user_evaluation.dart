@@ -18,7 +18,6 @@ class UserEvaluation extends StatefulWidget {
   _UserEvaluationState createState() => _UserEvaluationState();
 }
 
-
 class _UserEvaluationState extends State<UserEvaluation> {
   late Box<User> userBox;
   late Box<Score> scoreBox;
@@ -27,11 +26,11 @@ class _UserEvaluationState extends State<UserEvaluation> {
   @override
   void initState() {
     super.initState();
-    Hive.openBox<User>('user');
     userBox = Hive.box<User>('user');
     scoreBox = Hive.box<Score>('score');
     questionBox = Hive.box<Question>('question');
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +80,7 @@ class _UserEvaluationState extends State<UserEvaluation> {
     );
   }
 
-  Widget _buildUserList(BuildContext context) {
+Widget _buildUserList(BuildContext context) {
     return FutureBuilder<List<User>>(
       future: _loadUsers(),
       builder: (context, snapshot) {
@@ -95,65 +94,80 @@ class _UserEvaluationState extends State<UserEvaluation> {
           );
         } else {
           List<User> users = snapshot.data ?? [];
-          if (users.isEmpty) {
-            return const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: Center(
-                child: Text('No users available.',style: TextStyle(fontWeight: FontWeight.bold),),
-              ),
-            );
-          }
 
-          return ListView.builder(
-            itemCount: users.length,
-            itemBuilder: (context, index) {
-              // Extract the first letter of the username
-              String firstLetter = users[index].name.substring(0, 1).toUpperCase();
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  child: Text(
-                    firstLetter,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-                title: Text(users[index].name,style:const TextStyle(color: Colors.black)),
-                subtitle: Text(users[index].email,style: const TextStyle(color: Colors.black)),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        _showDeleteConfirmationDialog(context, users[index].userId);
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.bar_chart),
-                      onPressed: () {
-                        _navigateToStatistics(context, users[index].userId);
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+          return users.isEmpty
+              ? _buildNoUsersWidget()
+              : _buildUsersListView(users);
         }
       },
     );
   }
 
+  Widget _buildNoUsersWidget() {
+    return const Padding(
+      padding:EdgeInsets.all(18.0),
+      child:Center(
+        child: Text(
+          'No users available.',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUsersListView(List<User> users) {
+    return ListView.builder(
+      itemCount: users.length,
+      itemBuilder: (context, index) {
+        // Extract the first letter of the username
+        String firstLetter = users[index].name.substring(0, 1).toUpperCase();
+        return ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.grey,
+            child: Text(
+              firstLetter,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+          title: Text(users[index].name, style: const TextStyle(color: Colors.black)),
+          subtitle: Text(users[index].email, style: const TextStyle(color: Colors.black)),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  _showDeleteConfirmationDialog(context, users[index].userId);
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.bar_chart),
+                onPressed: () {
+                  _navigateToStatistics(context, users[index].userId);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Future<List<User>> _loadUsers() async {
-    // Check if the box is already open
-    await Hive.openBox<User>('user');
+    try {
+      // Check if the box is already open
+      await Hive.openBox<User>('user');
 
-    // Access the user box
-    final Box<User> userBox = Hive.box<User>('user');
+      // Access the user box
+      final Box<User> userBox = Hive.box<User>('user');
 
-    // Load users from Hive
-    List<User> users = userBox.values.toList();
-    return users;
+      // Load users from Hive
+      List<User> users = userBox.values.toList();
+      return users;
+    } catch (error) {
+      print('Error loading users: $error');
+      return [];
+    }
   }
 
   void _showDeleteConfirmationDialog(BuildContext context, String userId) {
@@ -172,7 +186,7 @@ class _UserEvaluationState extends State<UserEvaluation> {
             ),
             TextButton(
               onPressed: () {
-                _deleteUser(context, userId); 
+                _deleteUser(context, userId);
                 Navigator.of(dialogContext).pop();
               },
               child: const Text("Delete"),
@@ -187,9 +201,7 @@ class _UserEvaluationState extends State<UserEvaluation> {
     // Delete user from Hive
     userBox.delete(userId);
     // Refresh the user list
-    setState(() {
-    _loadUsers(); // Reload the users
-  });
+    _reloadUsers(context);
   }
 
   void _reloadUsers(BuildContext context) {
@@ -200,25 +212,25 @@ class _UserEvaluationState extends State<UserEvaluation> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => UserEvaluation(
-      correctAnswersCount: widget.correctAnswersCount,
-      incorrectAnswersCount:widget.incorrectAnswersCount, 
-    ),
+          correctAnswersCount: widget.correctAnswersCount,
+          incorrectAnswersCount: widget.incorrectAnswersCount,
+        ),
       ),
     );
   }
 
   void _navigateToStatistics(BuildContext context, String userId) {
     Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => StatisticsScreen(
-        scoreBox: scoreBox,
-        questionBox: questionBox,
-        userBox: userBox,
-        correctAnswersCount: widget.correctAnswersCount, // Fix the typo here
-        incorrectAnswersCount: widget.incorrectAnswersCount, // Fix the typo here
+      context,
+      MaterialPageRoute(
+        builder: (context) => StatisticsScreen(
+          scoreBox: scoreBox,
+          questionBox: questionBox,
+          userBox: userBox,
+          correctAnswersCount: widget.correctAnswersCount,
+          incorrectAnswersCount: widget.incorrectAnswersCount,
+        ),
       ),
-    ),
-  );
+    );
   }
 }

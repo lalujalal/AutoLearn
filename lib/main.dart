@@ -1,10 +1,18 @@
+import 'package:first_project/hive/hive.dart';
 import 'package:first_project/hive/hive_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/screens/splash.dart';
+import 'package:hive_flutter/adapters.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeHive(); 
+  await initializeHive();
+
+  await Hive.openBox<User>('user');
+  await Hive.openBox<Chapter>('chapter');
+  await Hive.openBox<Question>('question');
+  await Hive.openBox<Score>('score');
+  
   runApp(const MyApp());
 }
 

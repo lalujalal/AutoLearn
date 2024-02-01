@@ -19,17 +19,16 @@ class EditQuestionPageState extends State<EditQuestionPage> {
   bool loading = true; // Added loading state
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-@override
-void initState() {
-  super.initState();
-  Hive.openBox<Chapter>('chapter');
-  selectedChapter = chapterBox.isNotEmpty ? chapterBox.values.first : null;
+  @override
+  void initState() {
+    super.initState();
 
-  if (selectedChapter != null) {
-    final questionBoxKey = 'question_${selectedChapter!.chapterKey}';
-    questionBox = Hive.box<Question>(questionBoxKey);
+    Hive.box<Chapter>('chapter');
 
-    if (questionBox == null) {
+    selectedChapter = chapterBox.isNotEmpty ? chapterBox.values.first : null;
+
+    if (selectedChapter != null) {
+      final questionBoxKey = 'question_${selectedChapter!.chapterKey}';
       Hive.openBox<Question>(questionBoxKey).then(
         (box) {
           setState(() {
@@ -49,18 +48,10 @@ void initState() {
         );
       });
     } else {
-      setState(() {
-        questions = questionBox!.values.toList();
-        loading = false;
-      });
+      questions = [];
+      loading = false;
     }
-  } else {
-    questions = [];
-    loading = false;
   }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,43 +60,37 @@ void initState() {
         body: Padding(
           padding: EdgeInsets.all(10.0),
           child: Center(
-            child: Text('No chapters available Kindly add chapters to add questions',
-              style: TextStyle(fontWeight: FontWeight.bold,
-                fontSize: 16
+            child: Text(
+              'No chapters available. Kindly add chapters to add questions',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
             ),
           ),
         ),
       );
-    }
-
-    if (selectedChapter == null) {
+    } else if (selectedChapter == null) {
       return const Scaffold(
         body: Center(
           child: Text('No chapter selected'),
         ),
       );
-    }
-
-    if (loading) {
+    } else if (loading) {
       // Display a circular progress indicator while loading
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
       );
-    }
-
-    if (questionBox == null) {
+    } else if (questionBox == null) {
       // Handle the case when questionBox is null
       return const Scaffold(
         body: Center(
           child: Text('Error opening questionBox'),
         ),
       );
-    }
-
-    if (questions.isEmpty) {
+    } else if (questions.isEmpty) {
       return const Scaffold(
         body: Center(
           child: Text('No questions available for the selected chapter'),
@@ -135,28 +120,25 @@ void initState() {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text('Select Chapter', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                // Dropdown to select chapter
                 DropdownButton<Chapter>(
                   value: selectedChapter,
                   onChanged: (Chapter? value) {
                     setState(() {
                       selectedChapter = value;
-                      loading = true; // Set loading to true when changing the selected chapter
+                      loading = true;
                       questionBox = value != null ? Hive.box<Question>('question_${value.chapterKey}') : null;
                       questions = questionBox != null ? questionBox!.values.toList() : [];
                     });
 
-                    // Explicitly open the Hive box using openBox command
                     Hive.openBox<Question>('question_${selectedChapter!.chapterKey}').then(
                       (box) {
                         setState(() {
                           questionBox = box;
                           questions = questionBox!.values.toList();
-                          loading = false; // Set loading to false when the data is loaded
+                          loading = false;
                         });
                       },
                     ).catchError((error) {
-                      // Handle the case if there's an error opening the box
                       print('Error opening questionBox: $error');
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -199,11 +181,10 @@ void initState() {
                           return null;
                         },
                         onSaved: (value) {
-                          // Update the question text
                           questions[i] = questions[i].copyWith(questionText: value!);
                         },
                       ),
-                      const SizedBox(height: 10), // Add gap between question and options
+                      const SizedBox(height: 10),
                       for (int j = 0; j < questions[i].options.length; j++)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -233,11 +214,10 @@ void initState() {
                                 return null;
                               },
                               onSaved: (value) {
-                                // Update the option text
                                 questions[i] = questions[i].copyWithOption(index: j, option: value!);
                               },
                             ),
-                            const SizedBox(height: 10), // Add gap between options
+                            const SizedBox(height: 10),
                           ],
                         ),
                       const SizedBox(height: 5),
@@ -260,7 +240,6 @@ void initState() {
                       const Divider(thickness: 12),
                       ElevatedButton(
                         onPressed: () {
-                          // Delete the question
                           deleteQuestion(i);
                         },
                         style: ElevatedButton.styleFrom(
@@ -277,7 +256,6 @@ void initState() {
                 ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState?.validate() ?? false) {
-                      // Save the edited questions to Hive
                       saveEditedQuestions();
                     }
                   },
@@ -300,7 +278,6 @@ void initState() {
 
   void saveEditedQuestions() async {
     if (questionBox == null) {
-      // Handle the case when questionBox is null
       print('Error: questionBox is null');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -312,7 +289,7 @@ void initState() {
       return;
     }
 
-    await questionBox!.clear(); // Clear the existing questions in the box
+    await questionBox!.clear();
 
     for (int i = 0; i < questions.length; i++) {
       await questionBox!.put(questions[i].questionKey, questions[i]);
@@ -326,20 +303,28 @@ void initState() {
       ),
     );
 
-    // Navigate back to the previous screen
     Navigator.push(context, MaterialPageRoute(builder: (context) => AdminHome()));
   }
 
   void deleteQuestion(int index) {
-    // Remove the question from the UI
+    if (questionBox == null) {
+      print('Error: questionBox is null');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error deleting question'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
     setState(() {
       questions.removeAt(index);
     });
 
-    // Remove the question from the associated questionBox
     questionBox!.delete(questions[index].questionKey);
 
-    // Update the question numbers in the UI
     for (int i = index; i < questions.length; i++) {
       questions[i] = questions[i].copyWith(questionText: questions[i].questionText);
     }
@@ -369,6 +354,7 @@ extension QuestionExtension on Question {
     );
   }
 }
+
 
 
 
