@@ -1,6 +1,16 @@
 # first_project
 
-A new Flutter project.
+An Auntomobile learning application by flutter,
+Consist following features:
+login/signUp,
+study contents,
+questien answering with quiz option,
+progress visualisation,
+user and admin sides, admin can add/edit chapter contents, questions, 
+Hive used as database,
+hosted in Amazone playstore,
+
+
 
 ## Getting Started
 
